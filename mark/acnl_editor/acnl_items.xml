@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<cffunction name="optionsMethod" access="remote" output="false" returntype="any" httpmethod="OPTIONS" description="Method to respond to AngularJS trial call">
-    <cfheader name="Access-Control-Allow-Headers" value="Content-Type,x-requested-with,Authorization,Access-Control-Allow-Origin"> 
-    <cfheader name="Access-Control-Allow-Methods" value="GET,OPTIONS">      
-    <cfheader name="Access-Control-Allow-Origin" value="*">      
-    <cfheader name="Access-Control-Max-Age" value="360">        
-</cffunction>
+Header set Access-Control-Allow-Origin "*"
 <acnlitems>
 <!--
 	Animal Crossing: New Leaf item list for Save Editor v20150920
