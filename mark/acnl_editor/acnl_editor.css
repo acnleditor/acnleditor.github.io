@@ -1,0 +1,352 @@
+/*
+	Animal Crossing: New Leaf RAM Editor v20150920
+	by Marc Robledo 2015
+*/
+body{
+	font:15px sans-serif;
+	background-color:#fafafa;
+	margin:100px 30px 30px 30px;
+}
+input, select{font:100% sans-serif}
+.sprite{background-image:url('acnl_editor_sprites.png');background-repeat:no-repeat;}
+
+
+
+
+#header{
+	display: none;
+	background-color:#408041;
+	color:white;
+	position:fixed;top:0;
+	left:0;
+	width:100%;
+	line-height:1;
+	z-index:500;
+	padding-left:70px;
+	background-image:url('acnl_editor_bg.png');background-repeat:no-repeat; background-size: 40px 40px; background-position: 15px 20px;
+}
+#header h1{margin:0; padding: 12px 0;font-size:120%;}
+#tab-selector input{background-color:inherit; border: none; color: white; padding: 8px 15px; border-radius: 5px 5px 0 0}
+#tab-selector input:hover{background-color:#32a335; cursor:pointer}
+#tab-selector input.active{background-color:#fafafa; border: none; color: black;}
+#save-button{
+	position:absolute;
+	top: 22px;
+	right: 100px;
+	border-color: #72c874 !important;
+}
+#itemsribbon{margin-bottom: 20px}
+
+
+#home{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #408041 url(acnl_editor_bg.png) no-repeat bottom right;
+	color: white;
+	text-shadow: #093a0a 0 0 8px;
+	transition: background-color 1.5s;
+}
+
+#lang{position: absolute; top: 20px; right: 20px;}
+.sprite.flag{
+	display: inline-block;
+	width: 16px; height: 11px;
+	background-position: 0px 0px;
+	box-shadow: #093a0a 0 0 4px;
+}
+.sprite.flag-enu{background-position:-16px 0px}
+.sprite.flag-fr{background-position:-32px 0px}
+.sprite.flag-it{background-position:-48px 0px}
+.sprite.flag-de{background-position:-64px 0px}
+.sprite.flag-es{background-position:-80px 0px}
+#lang-selector{background-color:transparent; border: none; color:inherit; text-shadow:inherit}
+
+.home-block{
+	max-width: 640px;
+	padding: 20px 0;
+	color: black;
+	text-shadow: initial;
+	text-align: center;
+	border-radius: 8px;
+	line-height:3;
+	margin: 40px auto 0;
+	background-color:#fafafa;
+}
+#load{margin-top:80px}
+#load hr{border:none;border-bottom: 1px dotted #408041}
+#load b{color: red; display: block; line-height:2; margin-bottom: 20px;}
+#load a{color: #408041;font-weight:bold}
+#load a:hover{color: #a6e1a7}
+#contributions{background-color:#f8f5aa}
+#contributions input{font-size: 115%; font-weight: bold;cursor: pointer}
+#footer{position: absolute; bottom: 20px; left: 20px;line-height: 1.7}
+#footer a{color: white}
+#footer a:hover{color: #a6e1a7}
+#author{font-size: 120%; font-weight:bold}
+#author small{font-size: 80%; font-weight: normal}
+#thanks{font-size: 80%}
+
+
+#file-form{display:none}
+
+.pattern{
+	width: 64px;
+	height: 64px;
+	image-rendering: optimizeSpeed;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	image-rendering: pixelated;
+	-ms-interpolation-mode: nearest-neighbor;
+	margin: 2px;
+	transition: box-shadow .2s
+}
+.pattern:hover{cursor:pointer;box-shadow:#00c6ff 0 0 4px 1px}
+
+
+
+.help{
+	font-weight: bold; font-size: 80%;
+	background-color: #bbb;
+	color: white;
+	text-decoration: none;
+	padding: 2px 8px;
+	border-radius: 3px;
+	cursor:help;
+}
+.help:hover{background-color:#555}
+
+
+#map-acres{width:640px; display:inline-block;}
+#island-acres{width:220px; display:inline-block;}
+
+
+.grid{line-height:0;background-color:#aaa;border-top:1px solid #777;border-left:1px solid #777}
+#map,#map-grass{width:800px;height:640px}
+
+
+#player-selector input{width: 64px; height: 104px}
+.badges select{display:block; width: 80%;}
+.bronze{background-color: #ac8267; color: white}
+.silver{background-color: #d2d2d2; color: black}
+.gold{background-color: #e29714; color: yellow}
+.pockets{width:256px;height:16px}
+.dressers{width:80px;height:576px}
+.islandbox{width:80px;height:128px}
+
+.left{position:relative; top:18px; left:-120px; width: 100px;}
+.block{clear:both;padding-left:120px;}
+
+
+
+
+
+#island{width:320px;height:320px}
+
+table{border-collapse:collapse}
+th{background-color: #888; color: white;}
+td,th{padding: 4px 8px}
+td.count{color:#ccc;font-size:90%;font-weight:bold}
+
+.acre{width:160px;height:160px;float:left;background-size:100% 100%;}
+.tile{border-color:#777;width:15px;height:15px;border-width:0 1px 1px 0;background-color:#ddd;border-style:solid;margin:0;float:left}
+.acre .tile{width:9px;height:9px;border-style:dotted;background-color: transparent;}
+.acre .tile:nth-child(16n){border-right-style:solid}
+.acre .tile:nth-child(n+241){border-bottom-style: solid;}
+
+
+.tile.furniture{background-color:#3cde30}
+.tile.flower{background-color:#ec67b8}
+.tile.wiltedflower{background-color:#ac2778}
+.tile.patternground{background-color:#877861}
+
+
+.tile.money{background-color:yellow}
+.tile.rock{background-color:black}
+.tile.song{background-color:#a4ecb8}
+.tile.paper{background-color:#a4ece8}
+.tile.turnip{background-color:#bbac9d}
+.tile.catchable{background-color:#bae33e}
+.tile.wallfloor{background-color:#994040}
+.tile.clothes{background-color:#2874aa}
+.tile.gyroids{background-color:#d48324}
+.tile.mannequin{background-color:#2e5570}
+.tile.art{background-color:#cf540a}
+.tile.fossil{background-color:#868686}
+.tile.tool{background-color:#818181}
+
+
+
+.tile.tree{background-color:white}
+.tile.weed{background-color:green}
+
+
+.tile.unknown{background-image:url(acnl_editor_sprites.png);background-position:0 -20px}
+.tile.buried{background-image:url(acnl_editor_sprites.png);background-position:0 -40px}
+
+
+#debug{
+	display: none;
+	position: absolute;
+	top:0; left: 0;
+	padding: 8px;
+	border-radius: 3px;
+	color:white;
+	background-color:black;
+	background-color:rgba(0,0,0,.75);
+}
+#debug-hex{
+	font-family:monospace;
+	font-size: 80%;
+	color: #999;
+}
+
+
+
+#labelle{
+	float:right;
+	width: 280px;
+	height:180px;
+}
+#tab-buildings label{display:inline-block; width: 200px;}
+#tab-buildings select{width: 200px;}
+#buildings input.coord{width: 40px}
+
+.button{
+	padding:6px 12px;
+	background-color:#f0f0f0;
+	box-shadow:0px 1px 0px rgba(255, 255, 255, 0.2) inset, 0px 1px 2px rgba(0, 0, 0, 0.15);
+	text-shadow:0 1px 0 #f8f8f8;
+	border:none;
+	color:#333;
+
+	background-image:linear-gradient(to bottom, #fff, #e6e6e6);
+	background-repeat:repeat-x;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ccc #ccc #b3b3b3;
+	border-radius:2px;
+}
+.button:disabled{opacity:.35}
+.button:hover{
+	background-image:none;
+	background-color:#e0e0e0;
+	background-image:linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+	text-shadow:none;
+	color:#444;
+}
+.button:active,.button.active{
+	background-image:none;
+	transform:translate(0px,1px);
+	background-color:#ddd;
+	border-color:#888;
+	text-shadow:none;
+	box-shadow:0 2px 8px -3px rgba(0, 0, 0, 0.75) inset;
+}
+
+.blue-button{
+	background-color:#21759B !important;
+	background-image:linear-gradient(to bottom, #2A95C5, #21759B) !important;
+	border-color:#21759B #21759B #1E6A8D !important;
+	text-shadow:0 -1px 0 #20749a !important;
+	color:white !important;
+}
+.blue-button:hover{
+	background-color:#278AB7 !important;
+	background-image:linear-gradient(to bottom, #2E9FD2, #21759B) !important;
+	border-color:#1B607F !important;
+	text-shadow:0 -1px 0 #1b6080 !important;
+	color:white !important;
+}
+.blue-button:active{
+	background:linear-gradient(to bottom, #21759B, #278AB7) repeat scroll 0 0 #1B607F !important;
+	border-color:#124560 #0e74a3 #0e74a3 !important;
+	text-shadow:0 -1px 0 #177ea4 !important;
+	color:#dde7ec !important;
+}
+
+
+.red-button{
+	background-color:#b72319 !important;
+	background-image:linear-gradient(to bottom, #ce271d, #a41f17) !important;
+	border-color:#a41f17 #a41f17 #951d15 !important;
+	text-shadow:0 -1px 0 #a01d15 !important;
+	color:white !important;
+}
+.red-button:hover{
+	background-color:#bf261c !important;
+	background-image:linear-gradient(to bottom, #db2c20, #a52017) !important;
+	border-color:#871a13 !important;
+	text-shadow:0 -1px 0 #8b1b14 !important;
+	color:white !important;
+}
+.red-button:active{
+	background:linear-gradient(to bottom, #a51f17, #c1251b) repeat scroll 0 0 #b22118 !important;
+	border-color:#66140c #a0150d #a0150d !important;
+	text-shadow:0 -1px 0 #a41e17 !important;
+	color:#ecdddd !important;
+}
+
+
+
+
+.green-button{
+	background-color:#59b259 !important;
+	background-image:linear-gradient(to bottom, #61c261, #51a351) !important;
+	border-color:#52a452 #4f9f4f #448944 !important;
+	text-shadow:0 -1px 0 #37a137 !important;
+	color:white !important;
+}
+.green-button:hover{
+	background-color:#278AB7 !important;
+	background-image:linear-gradient(to bottom, #64ce64, #51a351) !important;
+	border-color:#3f7f3f !important;
+	text-shadow:0 -1px 0 #1c9216 !important;
+	color:white !important;
+}
+.green-button:active{
+	background:linear-gradient(to bottom, #1e8f22, #23a627) repeat scroll 0 0 #219b24 !important;
+	border-color:#105815 #17941b #17941b !important;
+	text-shadow:0 -1px 0 #17a417 !important;
+	color:#ddece0 !important;
+}
+
+
+#editor{position:relative}
+#search{
+	background-color: black;
+	background-color: rgba(0,0,0,.6);
+	color: white;
+	padding: 10px;
+	position: absolute;
+	top:30px; left: -10px;
+	border-radius: 4px;
+	display: none;
+	z-index:800;
+}
+#search ul{list-style:none;padding:0; max-height: 250px; overflow-y:auto; overflow-x:none; margin: 0}
+#search li{padding: 4px 6px;border-radius: 2px;}
+#search li:hover{cursor:pointer;background-color: white; color: black;}
+
+
+
+#overlay{
+	display:none;position:fixed;
+	top:0;left:0;
+	width:100%;height:100%;
+	background-color:rgba(0,0,0,.75);
+	z-index:600
+}
+.dialog{
+	display:none;position:fixed;
+	top:50%;left:50%;
+	padding: 20px;
+	background-color: white;
+	z-index:601;
+	box-shadow: black 0 0 15px;
+	text-align:center;
+	line-height:3
+}
