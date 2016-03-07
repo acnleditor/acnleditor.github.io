@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Animal Crossing: New Leaf Save Editor</title>
+	<link rel="shortcut icon" href="./acnl_editor.png" />
+	<meta http-equiv="content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="description" content="An Animal Crossing: New Leaf savegame editor. It lets you edit your town, items, villagers and more!" />
+	<meta name="keywords" content="animal, crossing, new, leaf, save, editor, ram, town, pockets, items, hack, exploit" />
+	<link type="text/css" rel="stylesheet" href="./acnl_editor.css" media="all"/>
+	<script type="text/javascript" src="./acnl_editor.js"></script>
+</head>
+<body>
+<div id="header">
+	<h1>Animal Crossing: New Leaf Save editor</h1>
+	<div id="tab-selector">
+		<input type="button" id="tab-button-map" value="Map" onclick="showTab('map')" class="active" />
+		<input type="button" id="tab-button-acres" value="Acres" onclick="showTab('acres')" />
+		<input type="button" id="tab-button-players" value="Players" onclick="showTab('players')" />
+		<input type="button" id="tab-button-island" value="Island" onclick="showTab('island')" />
+		<input type="button" id="tab-button-villagers" value="Villagers" onclick="showTab('villagers')" />
+		<input type="button" id="tab-button-buildings" value="Buildings" onclick="showTab('buildings')" />
+		<input type="button" id="tab-button-advanced" value="Advanced" onclick="showTab('advanced')" />
+	</div>
+	<input type="button" value="Save changes" onclick="saveChanges()" id="save-button" class="button blue-button" />
+</div>
+
+
+<div id="home">
+	<div id="lang">
+		Select item language: <div id="lang-flag" class="sprite flag flag-en"></div>
+		<select onchange="setCookie('lang',this.value); updateLangIcon(this.value)" id="lang-selector">
+			<option value="en" selected="selected">English</option>
+			<option value="enu">English (eur)</option>
+			<option value="fr">Français</option>
+			<option value="it">Italiano</option>
+			<option value="de">Deutsch</option>
+			<option value="es">Español</option>
+		</select>
+	</div>
+
+
+	<div id="load" class="home-block">
+		This app lets you edit your Animal Crossing: New Leaf savegame.
+		<b>Use this tool at your own risk.<br/>
+		By using it, you are responsible of any data lost.</b>
+
+		<hr/>
+
+		<span id="loading">Loading item database, please wait...</span>
+		<form id="loadform" style="display:none">
+			Open your <a href="help.html#Homebrew">garden.dat</a> or <a href="help.html#RAM">acnlram.bin</a> file here:<br/>
+			<input type="file" onchange="loadSavegameFromFile(this.files[0])" />
+		</form>
+	</div>
+
+	<div id="contributions" class="home-block">
+		<b>Contributions are welcome!</b>
+		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+			<input type="hidden" name="cmd" value="_s-xclick"/>
+			<input type="hidden" name="hosted_button_id" value="SL3WNLNEH5SUU"/>
+			<input type="submit" value="Donate" class="button green-button" />
+		</form>
+		If AC:NL Save editor was useful to you, feel free to contribute by making a donation :-)
+	</div>
+
+	<div id="footer">
+		<div id="author">AC:NL Save Editor <small><a href="help.html#Updates">v1.0 RC4</a> by <a href="http://usuaris.tinet.cat/mark/" target="_blank">Marc Robledo</a></small></div>
+		<div id="thanks">A lot of thanks to <a href="https://github.com/kwsch/NLSE/releases" target="_blank">NLSE by Kaphotics</a>, <a href="http://www.thulinma.com/acnl/" target="_blank">Thulinma</a>, <a href="http://gbatemp.net/threads/leaftools.383773/" target="_blank">NeoKamek</a>, SciresM, WulfyStylez, duke_srg &amp; froggestspirit!</div>
+	</div>
+</div>
+
+
+
+<form id="file-form"><input type="file" id="file-load" onchange="tempFile=new HexFile(this.files[0], tempFileLoadFunction), el('file-form').reset();" /></form>
+<div id="editor" style="display:none">
+	
+<div id="search">
+	<input type="text" id="search-input" onkeyup="searchItem(this.value)" />
+	<ul id="search-results"></ul>
+</div>
+
+<div id="itemsribbon">
+	<input type="button" class="button" value="Search" onclick="toggle('search'); el('search-input').focus();" />
+	<label for="items">Current item:</label> <select id="items" onchange="refreshFlagSelect()"><option value="32766" id="item_32766">-</option><option value="32766" id="item_unk">unknown item</option></select>
+	<label for="flag1">Flag 1:</label> <select id="flag1"><option value="0" id="flag1_0">0x00</option></select>
+	<label for="flag1">Flag 2:</label> <select id="flag2"><option value="0" id="flag2_0">0x00</option><option value="0" id="flag2_unk">0x00</option></select>
+</div>
+<div id="debug"><div id="debug-name"></div><div id="debug-hex"></div></div>
+
+
+
+<div id="tab-map">
+	<div id="map" class="grid"></div>
+
+	<input type="button" class="button blue-button" value="Fill all" onclick="fillAll()"/>
+	<input type="button" class="button red-button" value="Remove all" onclick="removeAll()"/>
+	<input type="button" class="button green-button" value="Remove weeds" onclick="removeWeeds()"/>
+	<input type="button" class="button" value="Water flowers" onclick="waterFlowers()"/>
+	Grass: 
+	<input type="button" class="button" value="Revive" onclick="town.fillGrass()"/>
+	<input type="button" class="button" value="Desert" onclick="town.fillDesert()"/>
+</div>
+
+
+<div id="tab-acres" style="display:none">
+	Left/right click to cycle between acres:<br/><br/>
+	<div style="float:right">
+		Note: keep a valid acre map structure. <a href="help.html#Warnings" class="help" target="_blank">More info</a>
+	</div>
+	<div id="map-acres"></div>
+	<div id="island-acres"></div>
+</div>
+
+
+<div id="tab-players" style="display:none">
+	<div id="player-selector">
+		<input type="image" class="button" src="" id="player0-pic" onclick="selectPlayer(0)" />
+		<input type="image" class="button" src="" id="player1-pic" onclick="selectPlayer(1)" />
+		<input type="image" class="button" src="" id="player2-pic" onclick="selectPlayer(2)" />
+		<input type="image" class="button" src="" id="player3-pic" onclick="selectPlayer(3)" />
+	</div>
+
+	<div style="float:left; width: 480px">
+		<div class="block">
+			<div class="left">Current player:</div>
+			<div><span id="current-player"></span></div>
+		</div>
+
+		<div class="block">
+			<div class="left">Gender:</div>
+			<div id="gendercontainers" class="gender"></div>
+		</div>
+
+		<div class="block">
+			<div class="left">Tan:</div>
+			<div id="tancontainers" class="tan"></div>
+		</div>
+
+		<div class="block">
+			<div class="left">Face: <a href="./faces.png" target="_blank" class="help">?</a></div>
+			<div id="facecontainers" class="face"></div>
+		</div>
+
+		<div class="block">
+			<div class="left">Pockets:</div>
+			<div id="pockets0" class="grid pockets"></div>
+			<div id="pockets1" class="grid pockets"></div>
+			<div id="pockets2" class="grid pockets"></div>
+			<div id="pockets3" class="grid pockets"></div>
+		</div>
+
+		<div class="block">
+			<div class="left">Island box:</div>
+			<div id="islandbox0" class="grid islandbox"></div>
+			<div id="islandbox1" class="grid islandbox"></div>
+			<div id="islandbox2" class="grid islandbox"></div>
+			<div id="islandbox3" class="grid islandbox"></div>
+		</div>
+
+		<div class="block">
+			<div class="left">Patterns:</div>
+			<div id="patterns0" class="patterns"></div>
+			<div id="patterns1" class="patterns"></div>
+			<div id="patterns2" class="patterns"></div>
+			<div id="patterns3" class="patterns"></div>
+		</div>
+
+		<div class="block" id="special-block">
+			<div class="left">Other:</div>
+			<div id="other0"><input type="button" class="button" value="Max bank" onclick="players[0].maxBank()"/> <input type="button" class="button" value="Fill encyclopedia" onclick="players[0].fillEncyclopedia()"/> </div>
+			<div id="other1"><input type="button" class="button" value="Max bank" onclick="players[1].maxBank()"/> <input type="button" class="button" value="Fill encyclopedia" onclick="players[1].fillEncyclopedia()"/> </div>
+			<div id="other2"><input type="button" class="button" value="Max bank" onclick="players[2].maxBank()"/> <input type="button" class="button" value="Fill encyclopedia" onclick="players[2].fillEncyclopedia()"/> </div>
+			<div id="other3"><input type="button" class="button" value="Max bank" onclick="players[3].maxBank()"/> <input type="button" class="button" value="Fill encyclopedia" onclick="players[3].fillEncyclopedia()"/> </div>
+		</div>
+	</div>
+
+	<div style="float:left; width: 220px">
+		<div class="block">
+			<div class="left">Dressers:</div>
+			<div id="dressers0" class="grid dressers"></div>
+			<div id="dressers1" class="grid dressers"></div>
+			<div id="dressers2" class="grid dressers"></div>
+			<div id="dressers3" class="grid dressers"></div>
+		</div>
+	</div>
+
+	<div style="float:left; width: 280px">
+		<div class="block">
+			<div class="left">Badges:</div>
+			<div id="badges0" class="badges"></div>
+			<div id="badges1" class="badges"></div>
+			<div id="badges2" class="badges"></div>
+			<div id="badges3" class="badges"></div>
+		</div>
+	</div>
+</div>
+
+
+<div id="tab-island" style="display:none">
+	Island map: <div id="island" class="grid"></div>
+</div>
+
+<div id="tab-buildings" style="display:none">
+	<div id="labelle"></div>
+	
+	Lost &amp; found: <div id="lostfound" class="grid pockets"></div>
+
+	<label for="nativefruit">Native fruit:</label><span id="nativefruitcontainer"></span><br/>
+	<label for="grasstype">Grass type:</label><span id="grasstypecontainer"></span><br/>
+	<label for="townhallcolor">Town hall color:</label><div id="townhallcolorcontainer" style="display:inline"></div><br/>
+	<label for="trainstationcolor">Train station color:</label><div id="trainstationcolorcontainer" style="display:inline"></div><br/>
+	<!-- <input type="button" id="new-building-button" value="Add building" class="button" onclick="newBuilding()" /> -->
+	<input type="button" id="new-building-button" value="Unlock all PWPs" class="button" onclick="if(confirm('Do you want to unlock all PWPs?')){town.unlockAllPWPs();alert('Done!');this.style.display='none'}" />
+
+
+	<br style="clear:both; display:block" />
+	<div style="float:right">
+		Note: find the desired x,y coordinates while moving mouse over the map<br/>
+		Be careful when moving certain buildings. <a href="help.html#Warnings" class="help" target="_blank">More info</a>
+	</div>
+	<table id="buildings">
+		<tr><th>#</th><th>Building</th><th>X</th><th>Y</th></tr>
+	</table>
+</div>
+
+<div id="tab-villagers" style="display:none">
+	<table id="villagers" style="float:left">
+		<tr><th>#</th><th>Current villagers</th></tr>
+	</table>
+
+	<table id="past-villagers" style="float:left">
+		<tr><th>#</th><th>Past villagers</th></tr>
+	</table>
+</div>
+
+<div id="tab-advanced" style="display:none">
+	Current secure NAND value: <input id="nand-value" disabled="disabled"/> <input type="button" class="button red-button" value="Update it using your latest savegame" onclick="tempFileLoadFunction=changeSecureNANDValue;el('file-load').click()" /><br/><br/>
+	Secure NAND value determines if the savegame will be valid for your console.<br/>
+	If you want to restore an older savegame, you will need to update its secure NAND value using your most up-to-date garden.dat file.
+</div>
+
+
+
+
+</div>
+
+
+<div id="overlay" onclick="closeDialog()"></div>
+<div id="update-dialog" class="dialog">
+	<b>AC:NL Save Editor was updated to v1.0 RC4! <small>(2015.10.12)</small></b><br/>
+	<a href="./help.html#Updates" target="_blank">More info...</a><br/>
+	<input type="button" class="button" value="Accept" onclick="closeDialog()"/>
+</div>
+<div id="pattern-dialog" class="dialog">
+	<img src="" id="pattern-preview" class="pattern" /><br/>
+	<span id="pattern-preview-title"></span><br/>
+	<input type="button" class="button" value="Import pattern" onclick="el('file-load').click()"/>
+	<input type="button" class="button" value="Export pattern" onclick="exportPattern()"/>	
+	<input type="button" class="button" value="Cancel" onclick="closeDialog()"/>
+</div>
+<div id="building-dialog" class="dialog">
+	<input type="hidden" id="building-slot" />
+	Select the new building: <select id="add-building-list"></select><br/>
+	<input type="button" class="button" value="Accept" onclick="acceptBuilding()"/>
+	<input type="button" class="button" value="Cancel" onclick="closeDialog()"/>
+</div>
+<div id="villager-dialog" class="dialog">
+	<input type="hidden" id="villager-edit" />
+	<label for="villager-new">New villager:</label> <select id="villager-new" onchange="el('villager-default').checked=true"></select> <a href="http://animalcrossing.wikia.com/wiki/Villager_list_%28New_Leaf%29" target="_blank" class="help">?</a><br/>
+	<div id="villager-current-options">
+		<input type="checkbox" id="villager-default" /> <label for="villager-default">Set villager data to default (catchphrase, clothes and furniture)</label><br/>
+		<input type="checkbox" id="villager-boxed" /> <label for="villager-boxed">Boxed (will move next day)</label><br/>
+	</div>
+	<input type="button" class="button" value="Accept" onclick="acceptVillagerEdit()" />
+	<input type="button" class="button" value="Cancel" onclick="closeDialog()" />
+</div>
+
+
+
+</body>
+</html>
