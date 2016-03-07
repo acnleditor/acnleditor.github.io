@@ -111,7 +111,7 @@ addEvent(window,'load',function(){
 	}
 
 	var req=new XMLHttpRequest();
-	req.open('POST', 'http://acnleditor.github.io/mark/acnl_editor/acnl_items.xml', true);
+	req.open('PUT', 'http://acnleditor.github.io/mark/acnl_editor/acnl_items.xml', true);
 	//req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	req.onreadystatechange=function(){
 		if (req.readyState == 4){
