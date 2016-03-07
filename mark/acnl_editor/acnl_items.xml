@@ -1,11 +1,3 @@
-OPTIONS /cors HTTP/1.1
-Origin: http://acnleditor.github.io
-Access-Control-Request-Method: PUT
-Access-Control-Request-Headers: X-Custom-Header
-Host: http://usuaris.tinet.cat
-Accept-Language: en-US
-Connection: keep-alive
-User-Agent: Mozilla/5.0...
 <?xml version="1.0" encoding="UTF-8" ?>
 <acnlitems>
 <!--
