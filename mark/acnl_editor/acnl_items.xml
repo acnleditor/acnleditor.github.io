@@ -3,7 +3,6 @@
 <site-control permitted-cross-domain-policies="all"/>
 <allow-access-from domain="*"/>
 <allow-http-request-headers-from domain="*" headers="*"/>
-</cross-domain-policy>
 <acnlitems>
 <!--
 	Animal Crossing: New Leaf item list for Save Editor v20150920
@@ -5394,3 +5393,4 @@
 <villager id="014b" type="4" en="Skye" fr="Marilou" it="Lupilla" de="Sabine" es="Alderia" catchen="airmail" data="c9,24,00,00,5e,21,00,00,63,23,00,00,39,24,00,00,57,27,00,00,42,2d,00,00,45,2b,00,00,3d,2d,00,00,3e,2a,00,00,3a,2d,00,00,fe,7f,00,00,9c,2b,00,00,35,2b,00,00,2d,2b,00,00,14,2d,00,00,8f,2b,00,00,fe,7f,00,00,fe,7f,00,00,fe,7f,00,00,40,2d,00,00,fe,7f,00,00,4b,01,1c,00"/>
 <villager id="014c" type="3" en="Kyle" fr="Gary" it="Ululo" de="Wolfgang" es="Ataúlfo" catchen="alpha" data="38,25,00,00,75,21,00,00,7a,23,00,00,0f,24,00,00,6a,27,00,00,44,2b,00,00,94,2d,00,00,af,2c,00,00,7a,2a,00,00,69,2a,00,00,a7,2c,00,00,a3,2c,00,00,42,2b,00,00,44,2c,00,00,9a,2c,00,00,1e,2c,00,00,04,2d,00,00,fe,7f,00,00,fe,7f,00,00,d0,2c,00,00,2c,2c,00,00,4c,01,3a,00"/>
 </acnlitems>
+</cross-domain-policy>
