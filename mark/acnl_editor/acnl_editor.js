@@ -124,7 +124,6 @@ addEvent(window,'load',function(){
 			}
 		}
 	}
-	req.send();
 });
 
 
